@@ -52,7 +52,7 @@ class _AppState extends State<App> {
       children: <Widget>[
 
         Container(
-          height: 540,
+          height: 500,
           color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -69,12 +69,12 @@ class _AppState extends State<App> {
                     Flexible(
 
                         child: textView(),
-                      fit: FlexFit.loose,
+                      flex: 1,
                     ),
 
                   ],
                 ),
-                flex: 1,
+                flex:1,
 
               ),
 
@@ -202,18 +202,7 @@ class _AppState extends State<App> {
     );
   }
 
- Widget info(){
-    return Align(
-      alignment: Alignment.topCenter,
-      child:Text(
-        'informações do paciente',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 25,
-        ),
-      ),
-    );
- }
+
 
 
 
@@ -255,8 +244,6 @@ Widget buttonCalc(){
         style: TextStyle(
 
           color: Colors.black,
-
-
         ),
       ),
     );
