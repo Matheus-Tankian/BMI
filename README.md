@@ -1,4 +1,4 @@
-# imc
+# BMI
 
 A new Flutter application.
 
