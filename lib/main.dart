@@ -31,8 +31,10 @@ class _AppState extends State<App> {
   double _numberTall = 0;
   double _numberAge = 0;
   double _imc = 0;
-  double _lose = 0;
+  double _loseOrgain = 0;
 
+  var color;
+  String textLoserOrGain;
   String testResult;
   String range1;
   String range2;
@@ -47,11 +49,7 @@ class _AppState extends State<App> {
   void calcBMI(){
     var aux;
     setState(() {
-
-
       aux = (_numberWeight/(_numberTall*_numberTall));
-
-      
       _imc = double.parse(aux.toStringAsFixed(2));
     });
   }
@@ -68,44 +66,70 @@ class _AppState extends State<App> {
   void calcReach(){
     setState(() {
       if(_genderValue == Gender.MAN && _imc>25){
-        _lose = (10*(_numberTall-1.00))*0.90;
+        var aux = (_numberTall - 1.00) - ((_numberTall-1.50)/4);
+        var aux2=  double.parse((aux*100).toStringAsFixed(2));
+        _loseOrgain = (_numberWeight - aux2);
+        textLoserOrGain = 'Lose';
       }else if(_genderValue == Gender.WOMAN && _imc>25){
-        _lose = (10*(_numberTall-1.00))*0.85;
+        var aux = (_numberTall - 1.00) - ((_numberTall-1.50)/4);
+        var aux2=  double.parse((aux*100).toStringAsFixed(2));
+        _loseOrgain = (_numberWeight - aux2);
+        textLoserOrGain = 'Lose';
       }else if(_genderValue == Gender.OTHER && _imc>25){
-        _lose = (10*(_numberTall-1.00))*0.88;
+        var aux = (_numberTall - 1.00) - ((_numberTall-1.50)/4);
+        var aux2=  double.parse((aux*100).toStringAsFixed(2));
+        _loseOrgain = (_numberWeight - aux2);
+        textLoserOrGain = 'Lose';
       }else if(_genderValue == Gender.MAN && _imc<18.5){
-        _lose =  (10*(_numberTall-1.00))*0.90;
+        var aux = (_numberTall - 1.00) - ((_numberTall-1.50)/4);
+        var aux2=  double.parse((aux*100).toStringAsFixed(2));
+        _loseOrgain = (aux2 - _numberWeight);
+        textLoserOrGain = 'Gain';
       }else if(_genderValue == Gender.WOMAN && _imc<18.5){
-        _lose =  (10*(_numberTall-1.00))*0.85;
+        var aux = (_numberTall - 1.00) - ((_numberTall-1.50)/4);
+        var aux2=  double.parse((aux*100).toStringAsFixed(2));
+        _loseOrgain = (aux2 - _numberWeight);
+        textLoserOrGain = 'Gain';
       }else if(_genderValue == Gender.OTHER && _imc<18.5){
-        _lose =  (10*(_numberTall-1.00))*0.88;
+        var aux = (_numberTall - 1.00) - ((_numberTall-1.50)/4);
+        var aux2=  double.parse((aux*100).toStringAsFixed(2));
+        _loseOrgain = (aux2 - _numberWeight);
+        textLoserOrGain = 'Gain';
       }else{
-        _lose = 0;
+        _loseOrgain = 0;
       }
     });
 
-    print(_lose);
+
   }
 
   void imcAdult(){
    setState(() {
      if(_imc<16){
        testResult = 'Severe Thinness';
-
+       color = Colors.red[900];
      }else if(_imc>=16 && _imc <=17){
        testResult = 'Moderate Thinness';
+       color = Colors.deepOrange[800];
      }else if(_imc>17 && _imc <=18.5){
        testResult = 'Mild Thinness';
+       color = Colors.yellow[800];
      }else if(_imc>18.5 && _imc <=25){
        testResult = 'Normal';
+       color = Colors.green;
      }else if(_imc>25 && _imc <=30){
        testResult = 'Overweight';
+       color = Colors.yellow[800];
+
      }else if(_imc>30 && _imc <=35){
        testResult = 'Obese Class I';
+       color = Colors.deepOrange[800];
      }else if(_imc>35 && _imc <=40){
        testResult = 'Obese Class II';
+       color = Colors.red;
      }else if(_imc>40){
        testResult = 'Obese Class III';
+       color = Colors.red[900];
      }
    });
 //   print(testResult);
@@ -581,7 +605,8 @@ Widget buttonCalc(){
                     child: Text(
                         '($testResult)',
                     style: TextStyle(
-                        fontSize: 20
+                        fontSize: 20,
+                      color: (color),
                       ),
                     ),
                   ),
@@ -620,7 +645,7 @@ Widget buttonCalc(){
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          'Lose $_lose kgs to achieve a healthy BMI',
+                          '$textLoserOrGain $_loseOrgain kgs to achieve a healthy BMI',
                           style: TextStyle(
                             fontSize: 15,
                           ),
