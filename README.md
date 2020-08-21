@@ -2,6 +2,22 @@
 
 A new Flutter application.
 
+This is an app that calculates your BMI, it shows results like your ideal BMI, your BMI level and your ideal weight for your height.
+
+Home screen.
+
+![ home screen](https://github.com/Matheus-Tankian/BMI/blob/master/Screenshot_20200821-131144.jpg)
+
+Adding data.
+
+![adding data](https://github.com/Matheus-Tankian/BMI/blob/master/Screenshot_20200821-131206.jpg)
+
+Final result.
+
+![final result](https://github.com/Matheus-Tankian/BMI/blob/master/Screenshot_20200821-131210.jpg)
+
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
