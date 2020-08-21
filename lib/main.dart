@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
+
 
 
 enum Gender{MAN, WOMAN, OTHER}
@@ -14,8 +13,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Calculadora IMC',
+      title: 'Calculator BMI',
       home: App() ,
+
     );
   }
 }
@@ -30,13 +30,92 @@ class _AppState extends State<App> {
   double _numberWeight = 0;
   double _numberTall = 0;
   double _numberAge = 0;
+  double _imc = 0;
+  double _lose = 0;
 
+  String testResult;
+  String range1;
+  String range2;
+
+
+
+
+
+
+
+
+  void calcBMI(){
+    var aux;
+    setState(() {
+
+
+      aux = (_numberWeight/(_numberTall*_numberTall));
+
+      
+      _imc = double.parse(aux.toStringAsFixed(2));
+    });
+  }
+
+  void calcRange(){
+    setState(() {
+      if(_numberAge> 18 && _numberAge<65){
+        range1 ='18.5';
+        range2 = '25';
+      }
+    });
+  }
+
+  void calcReach(){
+    setState(() {
+      if(_genderValue == Gender.MAN && _imc>25){
+        _lose = (10*(_numberTall-1.00))*0.90;
+      }else if(_genderValue == Gender.WOMAN && _imc>25){
+        _lose = (10*(_numberTall-1.00))*0.85;
+      }else if(_genderValue == Gender.OTHER && _imc>25){
+        _lose = (10*(_numberTall-1.00))*0.88;
+      }else if(_genderValue == Gender.MAN && _imc<18.5){
+        _lose =  (10*(_numberTall-1.00))*0.90;
+      }else if(_genderValue == Gender.WOMAN && _imc<18.5){
+        _lose =  (10*(_numberTall-1.00))*0.85;
+      }else if(_genderValue == Gender.OTHER && _imc<18.5){
+        _lose =  (10*(_numberTall-1.00))*0.88;
+      }else{
+        _lose = 0;
+      }
+    });
+
+    print(_lose);
+  }
+
+  void imcAdult(){
+   setState(() {
+     if(_imc<16){
+       testResult = 'Severe Thinness';
+
+     }else if(_imc>=16 && _imc <=17){
+       testResult = 'Moderate Thinness';
+     }else if(_imc>17 && _imc <=18.5){
+       testResult = 'Mild Thinness';
+     }else if(_imc>18.5 && _imc <=25){
+       testResult = 'Normal';
+     }else if(_imc>25 && _imc <=30){
+       testResult = 'Overweight';
+     }else if(_imc>30 && _imc <=35){
+       testResult = 'Obese Class I';
+     }else if(_imc>35 && _imc <=40){
+       testResult = 'Obese Class II';
+     }else if(_imc>40){
+       testResult = 'Obese Class III';
+     }
+   });
+//   print(testResult);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Imc'),
+        title: Text('BMI'),
       ),
 
       body:Container(
@@ -52,7 +131,7 @@ class _AppState extends State<App> {
       children: <Widget>[
 
         Container(
-          height: 500,
+          height: 700,
           color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -188,9 +267,15 @@ class _AppState extends State<App> {
 
               Expanded(
                 child: buttonCalc(),
-                flex: 1,
+                flex: 2,
               ),
-
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: result(),
+                ),
+                flex: 4,
+              ),
             ],
           ),
         ),
@@ -210,14 +295,18 @@ class _AppState extends State<App> {
 Widget buttonCalc(){
 
   return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 12),
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
     child: FlatButton(
       onPressed: () {
-
-        print(_genderValue);
-        print(_numberAge);
-        print(_numberWeight);
-        print(_numberTall);
+//
+//        print(_genderValue);
+//        print(_numberAge);
+//        print(_numberWeight);
+//        print(_numberTall);
+        calcBMI();
+        imcAdult();
+        calcRange();
+        calcReach();
 
       },
 
@@ -226,7 +315,7 @@ Widget buttonCalc(){
       disabledColor: Colors.grey,
       disabledTextColor: Colors.white,
       highlightColor: Colors.orangeAccent,
-      child: Text('CALCULAR IMC',
+      child: Text('CALCULATE BMI',
         style: TextStyle(
             fontSize: 30
         ),),
@@ -240,9 +329,9 @@ Widget buttonCalc(){
   Widget textView(){
     return  Center(
       child: Text(
-        "Descubra qual é seu índice de Massa Corporal",
+        "Find out what your Body Mass Index is",
         style: TextStyle(
-
+          fontSize: 16,
           color: Colors.black,
         ),
       ),
@@ -314,7 +403,7 @@ Widget buttonCalc(){
     return Align(
         alignment: Alignment.center,
         child: Text(
-          'Idade',
+          'Age',
           style: TextStyle(
             fontSize: 22
           ),
@@ -328,7 +417,7 @@ Widget buttonCalc(){
       return TextField(
         decoration: InputDecoration(
           border: OutlineInputBorder(),
-          labelText: 'Idade',
+          labelText: 'Age',
         ),
         onChanged: (text){
           var aux  = double.tryParse(text);
@@ -352,7 +441,7 @@ Widget buttonCalc(){
     return Align(
       alignment: Alignment.center,
       child: Text(
-        'Peso',
+        'Weight',
         style: TextStyle(
             fontSize: 22
         ),
@@ -366,7 +455,7 @@ Widget buttonCalc(){
     return TextField(
         decoration: InputDecoration(
           border: OutlineInputBorder(),
-          labelText: 'peso',
+          labelText: 'Weight',
         ),
         onChanged: (text){
           var aux  = double.tryParse(text);
@@ -400,7 +489,7 @@ Widget buttonCalc(){
     return Align(
       alignment: Alignment.center,
       child: Text(
-        'Altura',
+        'Height',
         style: TextStyle(
             fontSize: 22
         ),
@@ -414,7 +503,7 @@ Widget buttonCalc(){
     return TextField(
         decoration: InputDecoration(
           border: OutlineInputBorder(),
-          labelText: 'Altura',
+          labelText: 'Height',
         ),
         onChanged: (text){
           var aux  = double.tryParse(text);
@@ -442,5 +531,120 @@ Widget buttonCalc(){
         )
     );
   }
+
+  Widget result(){
+    return Container(
+
+      padding: const EdgeInsets.symmetric(horizontal:0),
+      color: Colors.grey[300],
+      child: Column(
+
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.symmetric( horizontal: 12),
+              color: Colors.green,
+              child: Center(
+                child: Text(
+                  'Result',
+                  style: TextStyle(
+                    fontSize: 26,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            flex: 2,
+          ),
+
+          Flexible(
+            child: Row(
+
+              children: <Widget>[
+
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      'BMI = $_imc KG',
+                      style: TextStyle(
+                          fontSize: 20
+                      ),
+                    ),
+                  ),
+                  flex: 2,
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                        '($testResult)',
+                    style: TextStyle(
+                        fontSize: 20
+                      ),
+                    ),
+                  ),
+                  flex: 2,
+                ),
+              ],
+            ),
+            flex: 3,
+          ),
+
+          Flexible(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child:Container(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            'Healthy BMI range: $range1 KG/m -- $range2 KG/m',
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                      ),
+                    ),
+                  ),
+                  flex: 1,
+                ),
+
+                Expanded(
+                  child:Container(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          'Lose $_lose kgs to achieve a healthy BMI',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  flex: 1,
+                ),
+
+
+              ],
+            ),
+            flex: 4,
+          ),
+
+
+        ],
+      ),
+    );
+  }
+
+
+
+
 
 }
